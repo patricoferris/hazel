@@ -74,8 +74,8 @@ let view =
       : div_empty;
   [
     div(
-      ~attr=Attr.id("main"),
-      [div(~attr=clss(["editor", "single"]), [editor_view])],
+      ~attrs=[Attr.id("main")],
+      [div(~attrs=[clss(["editor", "single"])], [editor_view])],
     ),
     sidebar,
     bottom_bar,

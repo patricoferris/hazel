@@ -78,6 +78,7 @@ let show = id =>
 type binding('v) = (t, 'v);
 
 module Map = {
+  open Ppx_yojson_conv_lib.Yojson_conv.Primitives;
   include Map.Make(Uuidm);
 
   let sexp_of_t = (sexp_of_v, map) =>

@@ -33,17 +33,18 @@ let view = (~font_metrics, {style, sort, measurement}: Profile.t) => {
     };
   Node.create_svg(
     "svg",
-    ~attr=
+    ~attrs=[
       Attr.many([
         Attr.class_(cls),
         DecUtil.abs_position(~font_metrics, measurement.origin),
         Attr.create("viewBox", Printf.sprintf("0 0 1 1")),
         Attr.create("preserveAspectRatio", "none"),
       ]),
+    ],
     [
       Node.create_svg(
         "rect",
-        ~attr=
+        ~attrs=[
           Attr.many(
             Attr.[
               create("x", Printf.sprintf("%fpx", -. r_x)),
@@ -53,6 +54,7 @@ let view = (~font_metrics, {style, sort, measurement}: Profile.t) => {
               Attr.classes(["caret-position-path", cls, c_cls]),
             ],
           ),
+        ],
         [],
       ),
     ],

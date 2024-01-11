@@ -88,6 +88,7 @@ module MakeSexp = (O: OrderedSexpType) : (SexpS with type key = O.t) => {
 };
 
 module MakeYojsonFor = (O: OrderedYojsonType, S: Map.S with type key = O.t) => {
+  open Ppx_yojson_conv_lib.Yojson_conv.Primitives;
   [@deriving yojson]
   type binding('v) = (O.t, 'v);
 

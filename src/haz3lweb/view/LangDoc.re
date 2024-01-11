@@ -6,23 +6,25 @@ open Widgets;
 
 let feedback_view = (message, up_active, up_action, down_active, down_action) => {
   div(
-    ~attr=clss(["feedback"]),
+    ~attrs=[clss(["feedback"])],
     [
-      div(~attr=clss(["message"]), [text(message)]),
+      div(~attrs=[clss(["message"])], [text(message)]),
       div(
-        ~attr=
+        ~attrs=[
           Attr.many([
             clss(["option"] @ (up_active ? ["active"] : [])),
             Attr.on_click(up_action),
           ]),
+        ],
         [text("👍")],
       ),
       div(
-        ~attr=
+        ~attrs=[
           Attr.many([
             clss(["option"] @ (down_active ? ["active"] : [])),
             Attr.on_click(down_action),
           ]),
+        ],
         [text("👎")],
       ),
     ],
@@ -82,25 +84,25 @@ let example_feedback_view = (~inject, id, example: LangDocMessages.example) => {
   );
 };
 
-let code_node = text => Node.span(~attr=clss(["code"]), [Node.text(text)]);
+let code_node = text =>
+  Node.span(~attrs=[clss(["code"])], [Node.text(text)]);
 
 let highlight =
     (~inject, msg: list(Node.t), id: Uuidm.t, mapping: ColorSteps.t)
     : (Node.t, ColorSteps.t) => {
   let (c, mapping) = ColorSteps.get_color(id, mapping);
   let classes = clss(["highlight-" ++ c, "clickable"]);
-  let attr =
+  let attrs =
     switch (inject) {
-    | Some(inject) =>
-      Attr.many([
+    | Some(inject) => [
         classes,
         Attr.on_click(_ =>
           inject(UpdateAction.PerformAction(Jump(TileId(id))))
         ),
-      ])
-    | None => classes
+      ]
+    | None => [classes]
     };
-  (Node.span(~attr, msg), mapping);
+  (Node.span(~attrs, msg), mapping);
 };
 
 /*ds
@@ -150,7 +152,7 @@ let mk_translation =
               switch (inject) {
               | Some(inject) => (
                   Node.span(
-                    ~attr=
+                    ~attrs=[
                       Attr.many([
                         clss(["clickable"]),
                         Attr.on_click(_ =>
@@ -159,6 +161,7 @@ let mk_translation =
                           )
                         ),
                       ]),
+                    ],
                     d,
                   ),
                   mapping,
@@ -174,10 +177,11 @@ let mk_translation =
               msg,
               [
                 Node.span(
-                  ~attr=
+                  ~attrs=[
                     Attr.style(
                       Css_gen.create(~field="font-style", ~value="italic"),
                     ),
+                  ],
                   d,
                 ),
               ],
@@ -200,7 +204,7 @@ let mk_explanation =
     mk_translation(~inject=Some(inject), text, show_highlight);
   (
     div([
-      div(~attr=clss(["explanation-contents"]), msg),
+      div(~attrs=[clss(["explanation-contents"])], msg),
       explanation_feedback_view(~inject, id, explanation),
     ]),
     color_map,
@@ -262,11 +266,12 @@ let deco =
               };
             let specificity_menu =
               Node.div(
-                ~attr=
+                ~attrs=[
                   Attr.many([
                     clss(["specificity-options-menu", "expandable"]),
                     specificity_style,
                   ]),
+                ],
                 List.mapi(
                   (index, (id, segment)) => {
                     let map = Measured.of_segment(segment);
@@ -275,7 +280,7 @@ let deco =
                     let classes = get_clss(segment);
                     id == form_id
                       ? Node.div(
-                          ~attr=
+                          ~attrs=[
                             Attr.many([
                               clss(["selected"] @ classes),
                               Attr.on_click(_ =>
@@ -289,10 +294,11 @@ let deco =
                                 )
                               ),
                             ]),
+                          ],
                           [code_view],
                         )
                       : Node.div(
-                          ~attr=
+                          ~attrs=[
                             Attr.many([
                               clss(classes),
                               Attr.on_click(_ =>
@@ -306,6 +312,7 @@ let deco =
                                 )
                               ),
                             ]),
+                          ],
                           [code_view],
                         );
                   },
@@ -316,7 +323,7 @@ let deco =
             let expand_arrow_style = Attr.create("style", specificity_pos);
             let expand_arrow =
               Node.div(
-                ~attr=Attr.many([clss(["arrow"]), expand_arrow_style]),
+                ~attrs=[Attr.many([clss(["arrow"]), expand_arrow_style])],
                 [],
               );
 
@@ -330,20 +337,17 @@ let deco =
               );
 
             Node.div(
-              ~attr=
-                Attr.many([
-                  clss(["expandable-target"]),
-                  DecUtil.abs_position(~font_metrics, origin),
-                  Attr.on_click(_ => {
-                    inject(
-                      Update.UpdateLangDocMessages(
-                        LangDocMessages.SpecificityOpen(
-                          !doc.specificity_open,
-                        ),
-                      ),
-                    )
-                  }),
-                ]),
+              ~attrs=[
+                clss(["expandable-target"]),
+                DecUtil.abs_position(~font_metrics, origin),
+                Attr.on_click(_ => {
+                  inject(
+                    Update.UpdateLangDocMessages(
+                      LangDocMessages.SpecificityOpen(!doc.specificity_open),
+                    ),
+                  )
+                }),
+              ],
               [expandable_deco, specificity_menu]
               @ (doc.specificity_open ? [] : [expand_arrow]),
             );
@@ -392,7 +396,7 @@ let syntactic_form_view =
       ~form_id,
     );
   div(
-    ~attr=Attr.many([Attr.id(id), Attr.class_("code-container")]),
+    ~attrs=[Attr.many([Attr.id(id), Attr.class_("code-container")])],
     [code_view] @ deco_view,
   );
 };
@@ -406,7 +410,7 @@ let example_view =
       ~examples: list(LangDocMessages.example),
     ) => {
   div(
-    ~attr=Attr.id("examples"),
+    ~attrs=[Attr.id("examples")],
     List.length(examples) == 0
       ? [text("No examples available")]
       : List.map(
@@ -443,17 +447,17 @@ let example_view =
                 ]
               };
             let code_container = view =>
-              div(~attr=clss(["code-container"]), view);
+              div(~attrs=[clss(["code-container"])], view);
             div(
-              ~attr=clss(["example"]),
+              ~attrs=[clss(["example"])],
               [
                 code_container([code_view]),
                 div(
-                  ~attr=clss(["ex-result"]),
+                  ~attrs=[clss(["ex-result"])],
                   [text("Result: "), code_container(result_view)],
                 ),
                 div(
-                  ~attr=clss(["explanation"]),
+                  ~attrs=[clss(["explanation"])],
                   [text("Explanation: "), text(message)],
                 ),
                 example_feedback_view(~inject, id, example),
@@ -2862,8 +2866,8 @@ let get_doc =
 
 let section = (~section_clss: string, ~title: string, contents: list(Node.t)) =>
   div(
-    ~attr=clss(["section", section_clss]),
-    [div(~attr=clss(["section-title"]), [text(title)])] @ contents,
+    ~attrs=[clss(["section", section_clss])],
+    [div(~attrs=[clss(["section-title"])], [text(title)])] @ contents,
   );
 
 let get_color_map =
@@ -2903,13 +2907,13 @@ let view =
   let (syn_form, (explanation, _), example) =
     get_doc(~docs=doc, info, MessageContent(inject, font_metrics, settings));
   div(
-    ~attr=Attr.id("side-bar"),
+    ~attrs=[Attr.id("side-bar")],
     [
       div(
-        ~attr=clss(["lang-doc"]),
+        ~attrs=[clss(["lang-doc"])],
         [
           div(
-            ~attr=clss(["top-bar"]),
+            ~attrs=[clss(["top-bar"])],
             [
               toggle(~tooltip="Toggle highlighting", "🔆", doc.highlight, _ =>
                 inject(
@@ -2919,7 +2923,7 @@ let view =
                 )
               ),
               div(
-                ~attr=
+                ~attrs=[
                   Attr.many([
                     clss(["close"]),
                     Attr.on_click(_ =>
@@ -2930,6 +2934,7 @@ let view =
                       )
                     ),
                   ]),
+                ],
                 [text("✕")],
               ),
             ],

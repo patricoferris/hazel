@@ -101,7 +101,7 @@ let view =
 
   let prompt_view =
     Cell.narrative_cell(
-      div(~attr=Attr.class_("cell-prompt"), [eds.prompt]),
+      div(~attrs=[Attr.class_("cell-prompt")], [eds.prompt]),
     );
 
   let prelude_view =
@@ -352,10 +352,10 @@ let view =
       : div([]);
   [
     div(
-      ~attr=Attr.id("main"),
+      ~attrs=[Attr.id("main")],
       [
         div(
-          ~attr=Attr.classes(["editor", "column"]),
+          ~attrs=[Attr.classes(["editor", "column"])],
           [title_view, prompt_view]
           @ render_cells(
               settings,

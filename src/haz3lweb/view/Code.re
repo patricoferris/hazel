@@ -21,8 +21,9 @@ let of_delim' =
       let label = is_in_buffer ? AssistantExpander.mark(label) : label;
       [
         span(
-          ~attr=
+          ~attrs=[
             Attr.classes(["token", cls, Sort.to_string(sort), plurality]),
+          ],
           [Node.text(List.nth(label, i))],
         ),
       ];
@@ -137,7 +138,7 @@ let simple_view = (~unselected, ~map, ~settings: Settings.t): Node.t => {
       let settings = settings;
     });
   div(
-    ~attr=Attr.class_("code"),
+    ~attrs=[Attr.class_("code")],
     [span_c("code-text", Text.of_segment([], false, Sort.Any, unselected))],
   );
 };
@@ -161,7 +162,7 @@ let view =
   let unselected = Text.of_segment(buffer_ids, false, sort, unselected);
   let holes = holes(~map=measured, ~font_metrics, segment);
   div(
-    ~attr=Attr.class_("code"),
+    ~attrs=[Attr.class_("code")],
     [span_c("code-text", unselected), ...holes],
   );
 };

@@ -2,6 +2,7 @@ open Sexplib.Std;
 open Lwt.Syntax;
 open Lwtutil;
 open Haz3lcore;
+open Ppx_yojson_conv_lib.Yojson_conv.Primitives;
 
 [@deriving (show({with_path: false}), sexp, yojson)]
 type key = string;

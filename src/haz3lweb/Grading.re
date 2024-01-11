@@ -5,22 +5,24 @@ include Haz3lschool.Grading.F(Exercise.ExerciseEnv);
 
 let score_view = ((earned: points, max: points)) => {
   div(
-    ~attr=
+    ~attrs=[
       Attr.classes([
         "test-percent",
         Float.equal(earned, max) ? "all-pass" : "some-fail",
       ]),
+    ],
     [text(Printf.sprintf("%.1f / %.1f pts", earned, max))],
   );
 };
 
 let percentage_view = (p: percentage) => {
   div(
-    ~attr=
+    ~attrs=[
       Attr.classes([
         "test-percent",
         Float.equal(p, 1.) ? "all-pass" : "some-fail",
       ]),
+    ],
     [text(Printf.sprintf("%.0f%%", 100. *. p))],
   );
 };
@@ -54,10 +56,10 @@ module TestValidationReport = {
   let view = (~inject, report: t, max_points: int) => {
     Cell.report_footer_view([
       div(
-        ~attr=Attr.classes(["test-summary"]),
+        ~attrs=[Attr.classes(["test-summary"])],
         [
           div(
-            ~attr=Attr.class_("test-text"),
+            ~attrs=[Attr.class_("test-text")],
             [score_view(score_of_percent(percentage(report), max_points))]
             @ textual_summary(report),
           ),
@@ -83,17 +85,17 @@ module MutationTestingReport = {
 
   let summary_message = (~score, ~total, ~found): Node.t =>
     div(
-      ~attr=Attr.classes(["test-text"]),
+      ~attrs=[Attr.classes(["test-text"])],
       [score_view(score), text(summary_str(~total, ~found))],
     );
 
   let bar = (~inject, instances) =>
     div(
-      ~attr=Attr.classes(["test-bar"]),
+      ~attrs=[Attr.classes(["test-bar"])],
       List.mapi(
         (id, (status, _)) =>
           div(
-            ~attr=
+            ~attrs=[
               Attr.many([
                 Attr.classes(["segment", TestStatus.to_string(status)]),
                 Attr.on_click(
@@ -101,6 +103,7 @@ module MutationTestingReport = {
                   TestView.jump_to_test(~inject, HiddenBugs(id), Id.invalid),
                 ),
               ]),
+            ],
             [],
           ),
         instances,
@@ -115,13 +118,14 @@ module MutationTestingReport = {
       );
     let status_class = total == found ? "Pass" : "Fail";
     div(
-      ~attr=
+      ~attrs=[
         Attr.classes([
           "cell-item",
           "test-summary",
           "cell-report",
           status_class,
         ]),
+      ],
       [
         summary_message(
           ~score=score_of_percent(percentage(report), max_points),
@@ -135,7 +139,7 @@ module MutationTestingReport = {
 
   let individual_report = (id, ~inject, ~hint: string, ~status: TestStatus.t) =>
     div(
-      ~attr=
+      ~attrs=[
         Attr.many([
           Attr.classes(["test-report"]),
           //TODO: wire up test ids
@@ -143,13 +147,15 @@ module MutationTestingReport = {
             TestView.jump_to_test(~inject, HiddenBugs(id), Id.invalid),
           ),
         ]),
+      ],
       [
         div(
-          ~attr=
+          ~attrs=[
             Attr.classes([
               "test-id",
               "Test" ++ TestStatus.to_string(status),
             ]),
+          ],
           /* NOTE: prints lexical index, not unique id */
           [text(string_of_int(id + 1))],
         ),
@@ -157,12 +163,13 @@ module MutationTestingReport = {
       ]
       @ [
         div(
-          ~attr=
+          ~attrs=[
             Attr.classes([
               "test-hint",
               "test-instance",
               TestStatus.to_string(status),
             ]),
+          ],
           [text(hint)],
         ),
       ],
@@ -257,16 +264,18 @@ module SyntaxReport = {
     let result_string = status ? "Pass" : "Indet";
 
     div(
-      ~attr=Attr.classes(["test-report"]),
+      ~attrs=[Attr.classes(["test-report"])],
       [
         div(
-          ~attr=Attr.classes(["test-id", "Test" ++ result_string]),
+          ~attrs=[Attr.classes(["test-id", "Test" ++ result_string])],
           [text(string_of_int(i + 1))],
         ),
       ]
       @ [
         div(
-          ~attr=Attr.classes(["test-hint", "test-instance", result_string]),
+          ~attrs=[
+            Attr.classes(["test-hint", "test-instance", result_string]),
+          ],
           [text(hint)],
         ),
       ],
@@ -297,10 +306,10 @@ module SyntaxReport = {
         Some(
           Cell.report_footer_view([
             div(
-              ~attr=Attr.classes(["test-summary"]),
+              ~attrs=[Attr.classes(["test-summary"])],
               [
                 div(
-                  ~attr=Attr.class_("test-text"),
+                  ~attrs=[Attr.class_("test-text")],
                   [
                     percentage_view(syntax_report.percentage),
                     text(
@@ -337,7 +346,7 @@ module ImplGradingReport = {
   //   let num_passed = num_passed(report);
   //   let status_class = total == num_passed ? "Pass" : "Fail";
   //   div(
-  //     ~attr=
+  //     ~attrs=[
   //       Attr.classes([
   //         "cell-item",
   //         "test-summary",
@@ -357,18 +366,20 @@ module ImplGradingReport = {
 
   let individual_report = (i, ~inject, ~hint: string, ~status, (id, _)) =>
     div(
-      ~attr=
+      ~attrs=[
         Attr.many([
           Attr.classes(["test-report"]),
           Attr.on_click(TestView.jump_to_test(~inject, HiddenTests, id)),
         ]),
+      ],
       [
         div(
-          ~attr=
+          ~attrs=[
             Attr.classes([
               "test-id",
               "Test" ++ TestStatus.to_string(status),
             ]),
+          ],
           /* NOTE: prints lexical index, not unique id */
           [text(string_of_int(i + 1))],
         ),
@@ -376,12 +387,13 @@ module ImplGradingReport = {
       ]
       @ [
         div(
-          ~attr=
+          ~attrs=[
             Attr.classes([
               "test-hint",
               "test-instance",
               TestStatus.to_string(status),
             ]),
+          ],
           [text(hint)],
         ),
       ],
@@ -426,10 +438,10 @@ module ImplGradingReport = {
         Some(
           Cell.report_footer_view([
             div(
-              ~attr=Attr.classes(["test-summary"]),
+              ~attrs=[Attr.classes(["test-summary"])],
               [
                 div(
-                  ~attr=Attr.class_("test-text"),
+                  ~attrs=[Attr.class_("test-text")],
                   [
                     score_view(
                       score_of_percent(

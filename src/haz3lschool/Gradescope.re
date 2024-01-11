@@ -2,6 +2,7 @@ open Haz3lcore;
 // open Sexplib.Std;
 open Haz3lschool;
 open Core;
+open Ppx_yojson_conv_lib.Yojson_conv.Primitives;
 
 open Specs;
 open GradePrelude.Exercise;

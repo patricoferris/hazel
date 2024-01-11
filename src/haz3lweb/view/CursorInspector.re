@@ -6,11 +6,11 @@ open Haz3lcore;
 
 let errc = "error";
 let okc = "ok";
-let div_err = div(~attr=clss([errc]));
-let div_ok = div(~attr=clss([okc]));
+let div_err = div(~attrs=[clss([errc])]);
+let div_ok = div(~attrs=[clss([okc])]);
 
 let code_err = (code: string): Node.t =>
-  div(~attr=clss(["code"]), [text(code)]);
+  div(~attrs=[clss(["code"])], [text(code)]);
 
 let lang_doc_toggle = (~inject, ~show_lang_doc: bool): Node.t => {
   let tooltip = "Toggle language documentation";
@@ -20,35 +20,38 @@ let lang_doc_toggle = (~inject, ~show_lang_doc: bool): Node.t => {
       Virtual_dom.Vdom.Effect.Stop_propagation,
     ]);
   div(
-    ~attr=clss(["lang-doc-button"]),
+    ~attrs=[clss(["lang-doc-button"])],
     [Widgets.toggle(~tooltip, "?", show_lang_doc, toggle_landocs)],
   );
 };
 
 let cls_view = (ci: Info.t): Node.t =>
   div(
-    ~attr=clss(["syntax-class"]),
+    ~attrs=[clss(["syntax-class"])],
     [text(ci |> Info.cls_of |> Term.Cls.show)],
   );
 
 let ctx_toggle = (~inject, context_inspector: bool): Node.t =>
   div(
-    ~attr=
+    ~attrs=[
       Attr.many([
         Attr.on_click(_ => inject(Update.Set(ContextInspector))),
         clss(["gamma"] @ (context_inspector ? ["visible"] : [])),
       ]),
+    ],
     [text("Γ")],
   );
 
 let term_view = (~inject, ~settings: Settings.t, ~show_lang_doc, ci) => {
   let sort = ci |> Info.sort_of |> Sort.show;
   div(
-    ~attr=clss(["ci-header", sort] @ (Info.is_error(ci) ? [errc] : [])),
+    ~attrs=[
+      clss(["ci-header", sort] @ (Info.is_error(ci) ? [errc] : [])),
+    ],
     [
       ctx_toggle(~inject, settings.context_inspector),
       CtxInspector.view(~inject, ~settings, ci),
-      div(~attr=clss(["term-tag"]), [text(sort)]),
+      div(~attrs=[clss(["term-tag"])], [text(sort)]),
       lang_doc_toggle(~inject, ~show_lang_doc),
       cls_view(ci),
     ],
@@ -201,7 +204,7 @@ let view_of_info =
     (~inject, ~settings, ~show_lang_doc: bool, ci: Statics.Info.t): Node.t => {
   let wrapper = status_view =>
     div(
-      ~attr=clss(["info"]),
+      ~attrs=[clss(["info"])],
       [term_view(~inject, ~settings, ~show_lang_doc, ci), status_view],
     );
   switch (ci) {
@@ -214,7 +217,9 @@ let view_of_info =
 
 let inspector_view = (~inject, ~settings, ~show_lang_doc, ci): Node.t =>
   div(
-    ~attr=clss(["cursor-inspector"] @ [Info.is_error(ci) ? errc : okc]),
+    ~attrs=[
+      clss(["cursor-inspector"] @ [Info.is_error(ci) ? errc : okc]),
+    ],
     [view_of_info(~inject, ~settings, ~show_lang_doc, ci)],
   );
 
@@ -226,12 +231,12 @@ let view =
       zipper: Zipper.t,
       info_map: Statics.Map.t,
     ) => {
-  let bar_view = div(~attr=Attr.id("bottom-bar"));
+  let bar_view = div(~attrs=[Attr.id("bottom-bar")]);
   let err_view = err =>
     bar_view([
       div(
-        ~attr=clss(["cursor-inspector", "no-info"]),
-        [div(~attr=clss(["icon"]), [Icons.magnify]), text(err)],
+        ~attrs=[clss(["cursor-inspector", "no-info"])],
+        [div(~attrs=[clss(["icon"])], [Icons.magnify]), text(err)],
       ),
     ]);
   switch (zipper.backpack, Indicated.index(zipper)) {
@@ -246,7 +251,7 @@ let view =
       bar_view([
         inspector_view(~inject, ~settings, ~show_lang_doc, ci),
         div(
-          ~attr=clss(["id"]),
+          ~attrs=[clss(["id"])],
           [text(String.sub(Id.to_string(id), 0, 4))],
         ),
       ])

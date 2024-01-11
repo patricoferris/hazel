@@ -1,4 +1,6 @@
 open Sexplib.Std;
+open Ppx_yojson_conv_lib.Yojson_conv.Primitives;
+
 module Sexp = Sexplib.Sexp;
 
 module Inner = {

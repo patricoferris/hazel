@@ -1,4 +1,5 @@
 open Sexplib.Std;
+open Ppx_yojson_conv_lib.Yojson_conv.Primitives;
 
 // invariant: List.length(as) == List.length(bs) + 1
 [@deriving (show({with_path: false}), sexp, yojson)]

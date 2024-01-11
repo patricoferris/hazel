@@ -1,5 +1,6 @@
 open Sexplib.Std;
 open Mold;
+open Ppx_yojson_conv_lib.Yojson_conv.Primitives;
 module P = Precedence;
 
 /* FORM

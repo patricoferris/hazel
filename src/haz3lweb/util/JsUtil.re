@@ -11,8 +11,7 @@ let get_elem_by_id = id => {
 };
 
 let date_now = () => {
-  %js
-  new Js.date_now;
+  [%js new Js.date_now];
 };
 
 let timestamp = () => date_now()##valueOf;
@@ -100,7 +99,7 @@ let clipboard_shim_id = "clipboard-shim";
 let focus_clipboard_shim = () => get_elem_by_id(clipboard_shim_id)##focus;
 
 let clipboard_shim = {
-  Node.textarea(~attr=Attr.many([Attr.id(clipboard_shim_id)]), []);
+  Node.textarea(~attrs=[Attr.many([Attr.id(clipboard_shim_id)])], []);
 };
 
 let copy = (str: string) => {

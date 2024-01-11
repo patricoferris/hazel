@@ -4,7 +4,7 @@ open Util;
 open Pretty;
 open Haz3lcore;
 
-let with_cls = cls => Node.span(~attr=Attr.classes([cls]));
+let with_cls = cls => Node.span(~attrs=[Attr.classes([cls])]);
 
 let view_of_layout = (~font_metrics: FontMetrics.t, l: DHLayout.t): Node.t => {
   let corner_radii = Decoration_common.corner_radii(font_metrics);
@@ -15,7 +15,7 @@ let view_of_layout = (~font_metrics: FontMetrics.t, l: DHLayout.t): Node.t => {
          ~text=(_, s) => ([Node.text(s)], []),
          ~align=
            (_, (txt, ds)) =>
-             ([Node.div(~attr=Attr.classes(["Align"]), txt)], ds),
+             ([Node.div(~attrs=[Attr.classes(["Align"])], txt)], ds),
          ~cat=(_, (txt1, ds1), (txt2, ds2)) => (txt1 @ txt2, ds1 @ ds2),
          ~annot=
            (~go, ~indent, ~start, annot: DHAnnot.t, m) => {
@@ -29,7 +29,7 @@ let view_of_layout = (~font_metrics: FontMetrics.t, l: DHLayout.t): Node.t => {
              | EmptyHole(selected, _inst) => (
                  [
                    Node.span(
-                     ~attr=
+                     ~attrs=[
                        Attr.many([
                          Attr.classes([
                            "EmptyHole",
@@ -42,6 +42,7 @@ let view_of_layout = (~font_metrics: FontMetrics.t, l: DHLayout.t): Node.t => {
                            ])
                          ),
                        ]),
+                     ],
                      txt,
                    ),
                  ],
@@ -90,7 +91,7 @@ let view_of_layout = (~font_metrics: FontMetrics.t, l: DHLayout.t): Node.t => {
            },
        );
   Node.div(
-    ~attr=Attr.classes(["DHCode"]),
+    ~attrs=[Attr.classes(["DHCode"])],
     [with_cls("code", text), ...decorations],
   );
 };

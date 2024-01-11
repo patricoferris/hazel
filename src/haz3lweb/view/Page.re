@@ -12,16 +12,14 @@ let download_editor_state = (~instructor_mode) =>
   });
 
 let menu_icon = {
-  let attr =
-    Attr.many(
-      Attr.[
-        clss(["menu-icon"]),
-        href("https://hazel.org"),
-        title("Hazel"),
-        create("target", "_blank"),
-      ],
-    );
-  a(~attr, [Icons.hazelnut]);
+  let attrs =
+    Attr.[
+      clss(["menu-icon"]),
+      href("https://hazel.org"),
+      title("Hazel"),
+      create("target", "_blank"),
+    ];
+  a(~attrs, [Icons.hazelnut]);
 };
 
 let history_bar = (ed: Editor.t, ~inject: Update.t => 'a) => [
@@ -51,7 +49,7 @@ let nut_menu =
     ) => [
   menu_icon,
   div(
-    ~attr=clss(["menu"]),
+    ~attrs=[clss(["menu"])],
     [
       toggle("τ", ~tooltip="Toggle Statics", statics, _ =>
         inject(Set(Statics))
@@ -119,9 +117,9 @@ let top_bar_view =
       ~model as {editors, settings, _}: Model.t,
     ) =>
   div(
-    ~attr=Attr.id("top-bar"),
+    ~attrs=[Attr.id("top-bar")],
     nut_menu(~inject, settings)
-    @ [div(~attr=Attr.id("title"), [text("hazel")])]
+    @ [div(~attrs=[Attr.id("title")], [text("hazel")])]
     @ [EditorModeView.view(~inject, ~settings, ~editors)]
     @ history_bar(Editors.get_editor(editors), ~inject)
     @ toolbar_buttons,
@@ -189,7 +187,7 @@ let get_selection = (model: Model.t): string =>
 
 let view = (~inject, ~handlers, model: Model.t) =>
   div(
-    ~attr=
+    ~attrs=[
       Attr.many(
         Attr.[
           id("page"),
@@ -221,6 +219,7 @@ let view = (~inject, ~handlers, model: Model.t) =>
           ...handlers(~inject),
         ],
       ),
+    ],
     [
       FontSpecimen.view("font-specimen"),
       DecUtil.filters,

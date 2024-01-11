@@ -40,7 +40,7 @@ let container =
     switch (container_type) {
     | Div =>
       Node.div(
-        ~attr=
+        ~attrs=[
           Attr.many([
             Attr.classes([
               "decoration-container",
@@ -55,12 +55,13 @@ let container =
               ),
             ),
           ]),
+        ],
         contents,
       )
     | Svg =>
       Node.create_svg(
         "svg",
-        ~attr=
+        ~attrs=[
           Attr.many([
             Attr.classes([cls]),
             Attr.create(
@@ -78,11 +79,12 @@ let container =
             ),
             Attr.create("preserveAspectRatio", "none"),
           ]),
+        ],
         contents,
       )
     };
   Node.div(
-    ~attr=
+    ~attrs=[
       Attr.many([
         Attr.classes([
           "decoration-container",
@@ -97,6 +99,7 @@ let container =
           ),
         ),
       ]),
+    ],
     [inner],
   );
 };

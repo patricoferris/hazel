@@ -4,19 +4,24 @@ open Widgets;
 
 let option_view = (name, n) =>
   option(
-    ~attr=n == name ? Attr.create("selected", "selected") : Attr.many([]),
+    ~attrs=[
+      n == name ? Attr.create("selected", "selected") : Attr.many([]),
+    ],
     [text(n)],
   );
 
 let mode_menu = (~inject: Update.t => 'a, ~mode: Settings.mode) =>
   div(
-    ~attr=Attr.many([Attr.class_("mode-name"), Attr.title("Toggle Mode")]),
+    ~attrs=[
+      Attr.many([Attr.class_("mode-name"), Attr.title("Toggle Mode")]),
+    ],
     [
       select(
-        ~attr=
+        ~attrs=[
           Attr.on_change((_, name) =>
             inject(Set(Mode(Settings.mode_of_string(name))))
           ),
+        ],
         List.map(
           option_view(Settings.show_mode(mode)),
           ["Scratch", "Examples", "Exercise"],
@@ -42,8 +47,9 @@ let scratch_view = (~inject, ~cur_slide, ~slides) =>
 let examples_view = (~inject, ~name, ~editors) => [
   mode_menu(~inject, ~mode=Examples),
   select(
-    ~attr=
+    ~attrs=[
       Attr.on_change((_, name) => inject(Update.SwitchExampleSlide(name))),
+    ],
     List.map(option_view(name), List.map(fst, editors)),
   ),
 ];
@@ -79,5 +85,5 @@ let view =
     | Exercise(cur_slide, specs, _) =>
       exercises_view(~cur_slide, ~specs, ~inject, ~instructor_mode)
     };
-  div(~attr=Attr.id("editor-mode"), contents);
+  div(~attrs=[Attr.id("editor-mode")], contents);
 };

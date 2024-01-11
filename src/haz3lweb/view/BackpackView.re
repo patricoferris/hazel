@@ -17,7 +17,7 @@ let backpack_sel_view =
     });
   // TODO(andrew): Maybe use init sort at caret to prime this
   div(
-    ~attr=
+    ~attrs=[
       Attr.many([
         Attr.classes(["code-text", "backpack-selection"]),
         Attr.create(
@@ -31,6 +31,7 @@ let backpack_sel_view =
           ),
         ),
       ]),
+    ],
     // zwsp necessary for containing box to stretch to contain trailing newline
     Text.of_segment([], true, Any, content) @ [text(Unicode.zwsp)],
   );
@@ -106,11 +107,12 @@ let view =
     );
   let selections_view =
     div(
-      ~attr=
+      ~attrs=[
         Attr.many([
           Attr.create("style", selections_style),
           Attr.classes(["backpack"]),
         ]),
+      ],
       selections,
     );
   let length =
@@ -130,11 +132,12 @@ let view =
     );
   let joiner =
     div(
-      ~attr=
+      ~attrs=[
         Attr.many([
           Attr.create("style", joiner_style),
           Attr.classes(["backpack-joiner"]),
         ]),
+      ],
       [],
     );
   //TODO(andrew): break out backpack decoration into its own module
@@ -161,15 +164,16 @@ let view =
       +. 1.,
     );
   div(
-    ~attr=
+    ~attrs=[
       Attr.many([
         Attr.classes(
           ["backpack"] @ (can_put_down ? [] : ["cant-put-down"]),
         ),
       ]),
+    ],
     [
       selections_view,
-      div(~attr=Attr.create("style", genie_style), [genie_view]),
+      div(~attrs=[Attr.create("style", genie_style)], [genie_view]),
     ]
     @ (backpack != [] ? [joiner] : []),
   );
