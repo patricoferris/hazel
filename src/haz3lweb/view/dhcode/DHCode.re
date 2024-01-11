@@ -30,18 +30,16 @@ let view_of_layout = (~font_metrics: FontMetrics.t, l: DHLayout.t): Node.t => {
                  [
                    Node.span(
                      ~attrs=[
-                       Attr.many([
-                         Attr.classes([
-                           "EmptyHole",
-                           ...selected ? ["selected"] : [],
-                         ]),
-                         Attr.on_click(_ =>
-                           Vdom.Effect.Many([
-                             Vdom.Effect.Stop_propagation,
-                             //inject(ModelAction.SelectHoleInstance(inst)),
-                           ])
-                         ),
+                       Attr.classes([
+                         "EmptyHole",
+                         ...selected ? ["selected"] : [],
                        ]),
+                       Attr.on_click(_ =>
+                         Vdom.Effect.Many([
+                           Vdom.Effect.Stop_propagation,
+                           //inject(ModelAction.SelectHoleInstance(inst)),
+                         ])
+                       ),
                      ],
                      txt,
                    ),

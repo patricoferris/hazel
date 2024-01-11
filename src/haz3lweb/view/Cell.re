@@ -16,20 +16,17 @@ let get_goal = (~font_metrics: FontMetrics.t, ~target_id, e) => {
 
 let mousedown_overlay = (~inject, ~font_metrics, ~target_id) =>
   Node.div(
-    ~attrs=[
-      Attr.many(
-        Attr.[
-          id("mousedown-overlay"),
-          on_mouseup(_ => inject(Update.SetMeta(Mouseup))),
-          on_mousemove(e => {
-            let goal = get_goal(~font_metrics, ~target_id, e);
-            inject(
-              Update.PerformAction(Select(Resize(Goal(Point(goal))))),
-            );
-          }),
-        ],
-      ),
-    ],
+    ~attrs=
+      Attr.[
+        id("mousedown-overlay"),
+        on_mouseup(_ => inject(Update.SetMeta(Mouseup))),
+        on_mousemove(e => {
+          let goal = get_goal(~font_metrics, ~target_id, e);
+          inject(
+            Update.PerformAction(Select(Resize(Goal(Point(goal))))),
+          );
+        }),
+      ],
     [],
   );
 
@@ -76,7 +73,7 @@ let simple_cell_item = (content: list(Node.t)) =>
   Node.div(~attrs=[Attr.classes(["cell", "cell-item"])], content);
 
 let cell_caption = (content: list(Node.t)) =>
-  Node.div(~attrs=[Attr.many([Attr.classes(["cell-caption"])])], content);
+  Node.div(~attrs=[Attr.classes(["cell-caption"])], content);
 
 let simple_caption = (caption: string) =>
   cell_caption([Node.text(caption)]);
@@ -119,20 +116,18 @@ let code_cell_view =
     [
       Node.div(
         ~attrs=[
-          Attr.many([
-            Attr.classes(
-              ["cell-item", "cell", ...clss]
-              @ (selected ? ["selected"] : ["deselected"]),
+          Attr.classes(
+            ["cell-item", "cell", ...clss]
+            @ (selected ? ["selected"] : ["deselected"]),
+          ),
+          Attr.on_mousedown(
+            mousedown_handler(
+              ~inject,
+              ~font_metrics,
+              ~target_id=code_id,
+              ~mousedown_updates,
             ),
-            Attr.on_mousedown(
-              mousedown_handler(
-                ~inject,
-                ~font_metrics,
-                ~target_id=code_id,
-                ~mousedown_updates,
-              ),
-            ),
-          ]),
+          ),
         ],
         Option.to_list(caption) @ code,
       ),
@@ -148,10 +143,7 @@ let test_status_icon_view =
     let status = insts |> TestMap.joint_status |> TestStatus.to_string;
     let pos = DecUtil.abs_position(~font_metrics, last);
     Some(
-      Node.div(
-        ~attrs=[Attr.many([Attr.classes(["test-result", status]), pos])],
-        [],
-      ),
+      Node.div(~attrs=[Attr.classes(["test-result", status]), pos], []),
     );
   | _ => None
   };
@@ -306,9 +298,7 @@ let editor_view =
     );
   let code_view =
     Node.div(
-      ~attrs=[
-        Attr.many([Attr.id(code_id), Attr.classes(["code-container"])]),
-      ],
+      ~attrs=[Attr.id(code_id), Attr.classes(["code-container"])],
       [code_base_view] @ deco_view,
     );
   code_cell_view(

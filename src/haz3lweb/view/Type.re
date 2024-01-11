@@ -25,10 +25,8 @@ let rec view_ty = (ty: Haz3lcore.Typ.t): Node.t =>
   | Unknown(prov) =>
     div(
       ~attrs=[
-        Attr.many([
-          clss(["typ-view", "atom", "unknown"]),
-          Attr.title(Typ.show_type_provenance(prov)),
-        ]),
+        clss(["typ-view", "atom", "unknown"]),
+        Attr.title(Typ.show_type_provenance(prov)),
       ],
       [text("?") /*, prov_view(prov)*/],
     )

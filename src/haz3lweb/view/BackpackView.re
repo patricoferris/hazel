@@ -18,19 +18,17 @@ let backpack_sel_view =
   // TODO(andrew): Maybe use init sort at caret to prime this
   div(
     ~attrs=[
-      Attr.many([
-        Attr.classes(["code-text", "backpack-selection"]),
-        Attr.create(
-          "style",
-          Printf.sprintf(
-            "position: absolute; transform-origin: bottom left; transform: translate(%fpx, %fpx) scale(%f); opacity: %f%%;",
-            x_off,
-            y_off,
-            scale,
-            opacity,
-          ),
+      Attr.classes(["code-text", "backpack-selection"]),
+      Attr.create(
+        "style",
+        Printf.sprintf(
+          "position: absolute; transform-origin: bottom left; transform: translate(%fpx, %fpx) scale(%f); opacity: %f%%;",
+          x_off,
+          y_off,
+          scale,
+          opacity,
         ),
-      ]),
+      ),
     ],
     // zwsp necessary for containing box to stretch to contain trailing newline
     Text.of_segment([], true, Any, content) @ [text(Unicode.zwsp)],
@@ -108,10 +106,8 @@ let view =
   let selections_view =
     div(
       ~attrs=[
-        Attr.many([
-          Attr.create("style", selections_style),
-          Attr.classes(["backpack"]),
-        ]),
+        Attr.create("style", selections_style),
+        Attr.classes(["backpack"]),
       ],
       selections,
     );
@@ -133,10 +129,8 @@ let view =
   let joiner =
     div(
       ~attrs=[
-        Attr.many([
-          Attr.create("style", joiner_style),
-          Attr.classes(["backpack-joiner"]),
-        ]),
+        Attr.create("style", joiner_style),
+        Attr.classes(["backpack-joiner"]),
       ],
       [],
     );
@@ -165,11 +159,7 @@ let view =
     );
   div(
     ~attrs=[
-      Attr.many([
-        Attr.classes(
-          ["backpack"] @ (can_put_down ? [] : ["cant-put-down"]),
-        ),
-      ]),
+      Attr.classes(["backpack"] @ (can_put_down ? [] : ["cant-put-down"])),
     ],
     [
       selections_view,

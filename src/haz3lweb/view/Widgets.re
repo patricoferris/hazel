@@ -5,11 +5,9 @@ open Util.Web;
 let button = (~tooltip="", icon, action) =>
   div(
     ~attrs=[
-      Attr.many([
-        clss(["icon"]),
-        Attr.on_mousedown(action),
-        Attr.title(tooltip),
-      ]),
+      clss(["icon"]),
+      Attr.on_mousedown(action),
+      Attr.title(tooltip),
     ],
     [icon],
   );
@@ -17,11 +15,9 @@ let button = (~tooltip="", icon, action) =>
 let button_d = (~tooltip="", icon, action, ~disabled: bool) =>
   div(
     ~attrs=[
-      Attr.many([
-        clss(["icon"] @ (disabled ? ["disabled"] : [])),
-        Attr.title(tooltip),
-        Attr.on_mousedown(_ => unless(disabled, action)),
-      ]),
+      clss(["icon"] @ (disabled ? ["disabled"] : [])),
+      Attr.title(tooltip),
+      Attr.on_mousedown(_ => unless(disabled, action)),
     ],
     [icon],
   );
@@ -31,11 +27,7 @@ let link = (~tooltip="", icon, url) =>
     ~attrs=[clss(["icon"])],
     [
       a(
-        ~attrs=[
-          Attr.many(
-            Attr.[href(url), title(tooltip), create("target", "_blank")],
-          ),
-        ],
+        ~attrs=Attr.[href(url), title(tooltip), create("target", "_blank")],
         [icon],
       ),
     ],
@@ -44,11 +36,9 @@ let link = (~tooltip="", icon, url) =>
 let toggle = (~tooltip="", label, active, action) =>
   div(
     ~attrs=[
-      Attr.many([
-        clss(["toggle-switch"] @ (active ? ["active"] : [])),
-        Attr.on_click(action),
-        Attr.title(tooltip),
-      ]),
+      clss(["toggle-switch"] @ (active ? ["active"] : [])),
+      Attr.on_click(action),
+      Attr.title(tooltip),
     ],
     [div(~attrs=[clss(["toggle-knob"])], [text(label)])],
   );
@@ -64,10 +54,7 @@ let file_select_button = (~tooltip="", id, icon, on_input) => {
         ~on_input,
         (),
       ),
-      div(
-        ~attrs=[Attr.many([clss(["icon"]), Attr.title(tooltip)])],
-        [icon],
-      ),
+      div(~attrs=[clss(["icon"]), Attr.title(tooltip)], [icon]),
     ],
   );
 };

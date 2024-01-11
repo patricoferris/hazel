@@ -10,9 +10,7 @@ module Interface = Haz3lcore.Interface;
 let test_instance_view =
     (~font_metrics, (d, status): TestMap.instance_report) =>
   div(
-    ~attrs=[
-      Attr.many([clss(["test-instance", TestStatus.to_string(status)])]),
-    ],
+    ~attrs=[clss(["test-instance", TestStatus.to_string(status)])],
     [
       DHCode.view(
         ~settings=Settings.Evaluation.init,
@@ -42,10 +40,8 @@ let test_report_view =
     instance_reports |> TestMap.joint_status |> TestStatus.to_string;
   div(
     ~attrs=[
-      Attr.many([
-        Attr.class_("test-report"),
-        Attr.on_click(jump_to_test(~inject, YourTestsTesting, id)),
-      ]),
+      Attr.class_("test-report"),
+      Attr.on_click(jump_to_test(~inject, YourTestsTesting, id)),
     ],
     [
       div(
@@ -92,10 +88,8 @@ let test_bar_segment = (~inject, pos, (id, reports)) => {
   let status = reports |> TestMap.joint_status |> TestStatus.to_string;
   div(
     ~attrs=[
-      Attr.many([
-        clss(["segment", status]),
-        Attr.on_click(jump_to_test(~inject, pos, id)),
-      ]),
+      clss(["segment", status]),
+      Attr.on_click(jump_to_test(~inject, pos, id)),
     ],
     [],
   );
@@ -148,7 +142,7 @@ let test_summary = (~inject, ~test_results: option(Interface.test_results)) => {
 
 let view_of_main_title_bar = (title_text: string) =>
   div(
-    ~attrs=[Attr.many([clss(["title-bar", "panel-title-bar"])])],
+    ~attrs=[clss(["title-bar", "panel-title-bar"])],
     [Node.text(title_text)],
   );
 

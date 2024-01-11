@@ -123,9 +123,7 @@ module Path = {
        });
     Node.create_svg(
       "path",
-      ~attrs=[
-        Attr.many([Attr.create("d", Buffer.contents(buffer)), ...attrs]),
-      ],
+      ~attrs=[Attr.create("d", Buffer.contents(buffer)), ...attrs],
       [],
     );
   };

@@ -34,10 +34,8 @@ let cls_view = (ci: Info.t): Node.t =>
 let ctx_toggle = (~inject, context_inspector: bool): Node.t =>
   div(
     ~attrs=[
-      Attr.many([
-        Attr.on_click(_ => inject(Update.Set(ContextInspector))),
-        clss(["gamma"] @ (context_inspector ? ["visible"] : [])),
-      ]),
+      Attr.on_click(_ => inject(Update.Set(ContextInspector))),
+      clss(["gamma"] @ (context_inspector ? ["visible"] : [])),
     ],
     [text("Γ")],
   );

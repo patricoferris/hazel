@@ -187,39 +187,36 @@ let get_selection = (model: Model.t): string =>
 
 let view = (~inject, ~handlers, model: Model.t) =>
   div(
-    ~attrs=[
-      Attr.many(
-        Attr.[
-          id("page"),
-          // safety handler in case mousedown overlay doesn't catch it
-          on_mouseup(_ => inject(Update.SetMeta(Mouseup))),
-          on_blur(_ => {
-            JsUtil.focus_clipboard_shim();
-            Virtual_dom.Vdom.Effect.Ignore;
-          }),
-          on_focus(_ => {
-            JsUtil.focus_clipboard_shim();
-            Virtual_dom.Vdom.Effect.Ignore;
-          }),
-          on_copy(_ => {
-            JsUtil.copy(get_selection(model));
-            Virtual_dom.Vdom.Effect.Ignore;
-          }),
-          on_cut(_ => {
-            JsUtil.copy(get_selection(model));
-            inject(UpdateAction.PerformAction(Destruct(Left)));
-          }),
-          on_paste(evt => {
-            let pasted_text =
-              Js.to_string(evt##.clipboardData##getData(Js.string("text")))
-              |> Str.global_replace(Str.regexp("\n[ ]*"), "\n");
-            Dom.preventDefault(evt);
-            inject(UpdateAction.Paste(pasted_text));
-          }),
-          ...handlers(~inject),
-        ],
-      ),
-    ],
+    ~attrs=
+      Attr.[
+        id("page"),
+        // safety handler in case mousedown overlay doesn't catch it
+        on_mouseup(_ => inject(Update.SetMeta(Mouseup))),
+        on_blur(_ => {
+          JsUtil.focus_clipboard_shim();
+          Virtual_dom.Vdom.Effect.Ignore;
+        }),
+        on_focus(_ => {
+          JsUtil.focus_clipboard_shim();
+          Virtual_dom.Vdom.Effect.Ignore;
+        }),
+        on_copy(_ => {
+          JsUtil.copy(get_selection(model));
+          Virtual_dom.Vdom.Effect.Ignore;
+        }),
+        on_cut(_ => {
+          JsUtil.copy(get_selection(model));
+          inject(UpdateAction.PerformAction(Destruct(Left)));
+        }),
+        on_paste(evt => {
+          let pasted_text =
+            Js.to_string(evt##.clipboardData##getData(Js.string("text")))
+            |> Str.global_replace(Str.regexp("\n[ ]*"), "\n");
+          Dom.preventDefault(evt);
+          inject(UpdateAction.Paste(pasted_text));
+        }),
+        ...handlers(~inject),
+      ],
     [
       FontSpecimen.view("font-specimen"),
       DecUtil.filters,

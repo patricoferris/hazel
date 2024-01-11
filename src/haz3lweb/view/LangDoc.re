@@ -11,19 +11,15 @@ let feedback_view = (message, up_active, up_action, down_active, down_action) =>
       div(~attrs=[clss(["message"])], [text(message)]),
       div(
         ~attrs=[
-          Attr.many([
-            clss(["option"] @ (up_active ? ["active"] : [])),
-            Attr.on_click(up_action),
-          ]),
+          clss(["option"] @ (up_active ? ["active"] : [])),
+          Attr.on_click(up_action),
         ],
         [text("👍")],
       ),
       div(
         ~attrs=[
-          Attr.many([
-            clss(["option"] @ (down_active ? ["active"] : [])),
-            Attr.on_click(down_action),
-          ]),
+          clss(["option"] @ (down_active ? ["active"] : [])),
+          Attr.on_click(down_action),
         ],
         [text("👎")],
       ),
@@ -153,14 +149,12 @@ let mk_translation =
               | Some(inject) => (
                   Node.span(
                     ~attrs=[
-                      Attr.many([
-                        clss(["clickable"]),
-                        Attr.on_click(_ =>
-                          inject(
-                            UpdateAction.PerformAction(Jump(TileId(id))),
-                          )
-                        ),
-                      ]),
+                      clss(["clickable"]),
+                      Attr.on_click(_ =>
+                        inject(
+                          UpdateAction.PerformAction(Jump(TileId(id))),
+                        )
+                      ),
                     ],
                     d,
                   ),
@@ -267,10 +261,8 @@ let deco =
             let specificity_menu =
               Node.div(
                 ~attrs=[
-                  Attr.many([
-                    clss(["specificity-options-menu", "expandable"]),
-                    specificity_style,
-                  ]),
+                  clss(["specificity-options-menu", "expandable"]),
+                  specificity_style,
                 ],
                 List.mapi(
                   (index, (id, segment)) => {
@@ -281,37 +273,33 @@ let deco =
                     id == form_id
                       ? Node.div(
                           ~attrs=[
-                            Attr.many([
-                              clss(["selected"] @ classes),
-                              Attr.on_click(_ =>
-                                inject(
-                                  Update.UpdateLangDocMessages(
-                                    LangDocMessages.UpdateGroupSelection(
-                                      group_id,
-                                      index,
-                                    ),
+                            clss(["selected"] @ classes),
+                            Attr.on_click(_ =>
+                              inject(
+                                Update.UpdateLangDocMessages(
+                                  LangDocMessages.UpdateGroupSelection(
+                                    group_id,
+                                    index,
                                   ),
-                                )
-                              ),
-                            ]),
+                                ),
+                              )
+                            ),
                           ],
                           [code_view],
                         )
                       : Node.div(
                           ~attrs=[
-                            Attr.many([
-                              clss(classes),
-                              Attr.on_click(_ =>
-                                inject(
-                                  Update.UpdateLangDocMessages(
-                                    LangDocMessages.UpdateGroupSelection(
-                                      group_id,
-                                      index,
-                                    ),
+                            clss(classes),
+                            Attr.on_click(_ =>
+                              inject(
+                                Update.UpdateLangDocMessages(
+                                  LangDocMessages.UpdateGroupSelection(
+                                    group_id,
+                                    index,
                                   ),
-                                )
-                              ),
-                            ]),
+                                ),
+                              )
+                            ),
                           ],
                           [code_view],
                         );
@@ -322,10 +310,7 @@ let deco =
 
             let expand_arrow_style = Attr.create("style", specificity_pos);
             let expand_arrow =
-              Node.div(
-                ~attrs=[Attr.many([clss(["arrow"]), expand_arrow_style])],
-                [],
-              );
+              Node.div(~attrs=[clss(["arrow"]), expand_arrow_style], []);
 
             let expandable_deco =
               DecUtil.code_svg(
@@ -396,7 +381,7 @@ let syntactic_form_view =
       ~form_id,
     );
   div(
-    ~attrs=[Attr.many([Attr.id(id), Attr.class_("code-container")])],
+    ~attrs=[Attr.id(id), Attr.class_("code-container")],
     [code_view] @ deco_view,
   );
 };
@@ -2924,16 +2909,14 @@ let view =
               ),
               div(
                 ~attrs=[
-                  Attr.many([
-                    clss(["close"]),
-                    Attr.on_click(_ =>
-                      inject(
-                        Update.UpdateLangDocMessages(
-                          LangDocMessages.ToggleShow,
-                        ),
-                      )
-                    ),
-                  ]),
+                  clss(["close"]),
+                  Attr.on_click(_ =>
+                    inject(
+                      Update.UpdateLangDocMessages(
+                        LangDocMessages.ToggleShow,
+                      ),
+                    )
+                  ),
                 ],
                 [text("✕")],
               ),

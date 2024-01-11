@@ -2,10 +2,7 @@ open Virtual_dom.Vdom;
 
 let btn = (~inject, caption, action) => {
   Node.(
-    button(
-      ~attrs=[Attr.many([Attr.on_click(_ => inject(action))])],
-      [text(caption)],
-    )
+    button(~attrs=[Attr.on_click(_ => inject(action))], [text(caption)])
   );
 };
 

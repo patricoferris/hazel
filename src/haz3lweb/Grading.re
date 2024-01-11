@@ -96,13 +96,11 @@ module MutationTestingReport = {
         (id, (status, _)) =>
           div(
             ~attrs=[
-              Attr.many([
-                Attr.classes(["segment", TestStatus.to_string(status)]),
-                Attr.on_click(
-                  //TODO: wire up test ids
-                  TestView.jump_to_test(~inject, HiddenBugs(id), Id.invalid),
-                ),
-              ]),
+              Attr.classes(["segment", TestStatus.to_string(status)]),
+              Attr.on_click(
+                //TODO: wire up test ids
+                TestView.jump_to_test(~inject, HiddenBugs(id), Id.invalid),
+              ),
             ],
             [],
           ),
@@ -140,13 +138,11 @@ module MutationTestingReport = {
   let individual_report = (id, ~inject, ~hint: string, ~status: TestStatus.t) =>
     div(
       ~attrs=[
-        Attr.many([
-          Attr.classes(["test-report"]),
-          //TODO: wire up test ids
-          Attr.on_click(
-            TestView.jump_to_test(~inject, HiddenBugs(id), Id.invalid),
-          ),
-        ]),
+        Attr.classes(["test-report"]),
+        //TODO: wire up test ids
+        Attr.on_click(
+          TestView.jump_to_test(~inject, HiddenBugs(id), Id.invalid),
+        ),
       ],
       [
         div(
@@ -367,10 +363,8 @@ module ImplGradingReport = {
   let individual_report = (i, ~inject, ~hint: string, ~status, (id, _)) =>
     div(
       ~attrs=[
-        Attr.many([
-          Attr.classes(["test-report"]),
-          Attr.on_click(TestView.jump_to_test(~inject, HiddenTests, id)),
-        ]),
+        Attr.classes(["test-report"]),
+        Attr.on_click(TestView.jump_to_test(~inject, HiddenTests, id)),
       ],
       [
         div(

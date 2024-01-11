@@ -8,12 +8,7 @@ let jump_to = entry =>
 let context_entry_view = (~inject, entry: Haz3lcore.Ctx.entry): Node.t => {
   let div_name =
     div(
-      ~attrs=[
-        Attr.many([
-          clss(["name"]),
-          Attr.on_click(_ => inject(jump_to(entry))),
-        ]),
-      ],
+      ~attrs=[clss(["name"]), Attr.on_click(_ => inject(jump_to(entry)))],
     );
   switch (entry) {
   | VarEntry({name, typ, _})

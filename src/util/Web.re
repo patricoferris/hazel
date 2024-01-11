@@ -8,9 +8,7 @@ let span_c = cls => span(~attrs=[Attr.class_(cls)]);
 
 let div_empty = div(~attrs=[Attr.create("style", "display:none")], []);
 
-let div_if = (p, ats, ns) =>
-  p ? div(~attrs=[Attr.many(ats)], ns) : div_empty;
-let span_if = (p, ats, ns) =>
-  p ? span(~attrs=[Attr.many(ats)], ns) : span([]);
+let div_if = (p, attrs, ns) => p ? div(~attrs, ns) : div_empty;
+let span_if = (p, attrs, ns) => p ? span(~attrs, ns) : span([]);
 
 let unless = (p, a) => p ? Effect.Many([]) : a;

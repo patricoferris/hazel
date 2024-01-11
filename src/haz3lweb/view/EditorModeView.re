@@ -4,17 +4,13 @@ open Widgets;
 
 let option_view = (name, n) =>
   option(
-    ~attrs=[
-      n == name ? Attr.create("selected", "selected") : Attr.many([]),
-    ],
+    ~attrs=n == name ? [Attr.create("selected", "selected")] : [],
     [text(n)],
   );
 
 let mode_menu = (~inject: Update.t => 'a, ~mode: Settings.mode) =>
   div(
-    ~attrs=[
-      Attr.many([Attr.class_("mode-name"), Attr.title("Toggle Mode")]),
-    ],
+    ~attrs=[Attr.class_("mode-name"), Attr.title("Toggle Mode")],
     [
       select(
         ~attrs=[
