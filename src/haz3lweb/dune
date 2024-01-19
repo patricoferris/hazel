@@ -61,12 +61,12 @@
   (pps js_of_ocaml-ppx)))
 
 (env
- (dev
+ (_
   (js_of_ocaml
-   (flags (:standard))))
- (release
-  (js_of_ocaml
-   (flags (:standard)))))
+   (flags
+    (:standard --enable effects))
+   (build_runtime_flags
+    (:standard --enable effects)))))
 
 (rule
  (write-file js-of-ocaml-flags-dev "(:standard)"))

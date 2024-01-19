@@ -113,7 +113,7 @@ let rects =
         ~is_first=false,
         ~is_last=false,
         start: MeasuredPosition.t,
-        box: MeasuredLayout.box,
+        box: Pretty.Types.MeasuredLayout.box,
       ) =>
     SvgUtil.Rect.{
       min: {
@@ -130,7 +130,7 @@ let rects =
   m.metrics
   |> List.mapi((i, box) => (i, box))
   |> List.fold_left_map(
-       (start: MeasuredPosition.t, (i, box: MeasuredLayout.box)) =>
+       (start: MeasuredPosition.t, (i, box: Pretty.Types.MeasuredLayout.box)) =>
          (
            {row: start.row + box.height, col: indent},
            mk_rect(~is_first=i == 0, ~is_last=i == n - 1, start, box),

@@ -1,22 +1,7 @@
-open Sexplib.Std;
+// open Sexplib.Std;
+open Types.MeasuredLayout;
 
-[@deriving sexp]
-type box = {
-  height: int,
-  width: int,
-};
-
-[@deriving sexp]
-type t('annot) = {
-  layout: t'('annot),
-  metrics: list(box),
-}
-and t'('annot) =
-  | Linebreak
-  | Text(string)
-  | Align(t('annot))
-  | Cat(t('annot), t('annot))
-  | Annot('annot, t('annot));
+type t('annot) = Types.MeasuredLayout.t('annot);
 
 type with_offset('annot) = (int, t('annot));
 
@@ -106,46 +91,55 @@ let pos_fold =
 };
 
 module Make = (MemoTbl: MemoTbl.S) => {
-  let table: MemoTbl.t(Layout.t(unit), t(unit)) = MemoTbl.mk();
-  let rec mk = (l: Layout.t('annot)): t('annot) => {
-    switch (MemoTbl.get(table, Obj.magic(l))) {
-    | Some(m) => Obj.magic(m)
-    | None =>
-      let m =
-        switch (l) {
-        | Linebreak =>
-          let box = {height: 1, width: 0};
-          {metrics: [box, box], layout: Linebreak};
-        | Text(s) => {
-            metrics: [{height: 1, width: Unicode.length(s)}],
-            layout: Text(s),
-          }
-        | Align(l) =>
-          let m = mk(l);
-          let bounding_box =
-            m.metrics
-            |> List.fold_left(
-                 ({height: bh, width: bw}, {height, width}) =>
-                   {height: bh + height, width: max(bw, width)},
-                 {height: 0, width: 0},
-               );
-          {metrics: [bounding_box], layout: Align(m)};
-        | Cat(l1, l2) =>
-          let m1 = mk(l1);
-          let m2 = mk(l2);
-          let (leading, last) = ListUtil.split_last(m1.metrics);
-          let (first, trailing) = ListUtil.split_first(m2.metrics);
-          let mid_box = {
-            height: max(last.height, first.height),
-            width: last.width + first.width,
+  // let table: MemoTbl.t = MemoTbl.mk();
+  let table: ref(Hmap.t) = ref(Hmap.empty);
+  let rec mk: 'annot. Layout.t('annot) => t('annot) =
+    l => {
+      switch (Hmap.find(l.key, table^)) {
+      | Some(m) =>
+        switch (m) {
+        | Layout.Measured(m) => m
+        | _ => assert(false)
+        }
+      | None =>
+        let m =
+          switch (l.layout) {
+          | Linebreak =>
+            let box = {height: 1, width: 0};
+            {metrics: [box, box], layout: Linebreak};
+          | Text(s) => {
+              metrics: [{height: 1, width: Unicode.length(s)}],
+              layout: Text(s),
+            }
+          | Align(l) =>
+            let m = mk(l);
+            let bounding_box =
+              m.metrics
+              |> List.fold_left(
+                   ({height: bh, width: bw}, {height, width}) =>
+                     {height: bh + height, width: max(bw, width)},
+                   {height: 0, width: 0},
+                 );
+            {metrics: [bounding_box], layout: Align(m)};
+          | Cat(l1, l2) =>
+            let m1 = mk(l1);
+            let m2 = mk(l2);
+            let (leading, last) = ListUtil.split_last(m1.metrics);
+            let (first, trailing) = ListUtil.split_first(m2.metrics);
+            let mid_box = {
+              height: max(last.height, first.height),
+              width: last.width + first.width,
+            };
+            {
+              metrics: leading @ [mid_box, ...trailing],
+              layout: Cat(m1, m2),
+            };
+          | Annot(annot, l) =>
+            let m = mk(l);
+            {...m, layout: Annot(annot, m)};
           };
-          {metrics: leading @ [mid_box, ...trailing], layout: Cat(m1, m2)};
-        | Annot(annot, l) =>
-          let m = mk(l);
-          {...m, layout: Annot(annot, m)};
-        };
-      MemoTbl.set(table, Obj.magic(l), Obj.magic(m));
-      m;
+        table := Hmap.add(l.key, Layout.Measured(m), table^);
+        m;
+      };
     };
-  };
 };
